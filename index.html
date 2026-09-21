@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Sinking Fund Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>🎓 Student Sinking Fund Tracker</h1>
+
+  <div class="card">
+    <h2>Add Student to Roster</h2>
+    <form id="addStudentForm" class="inline-form">
+      <input type="text" id="newStudentName" placeholder="Enter student name (e.g. Yian)" required>
+      <button type="submit">Add Student</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Record Money Received</h2>
+    <form id="paymentForm" class="form-grid">
+      <div>
+        <label for="selectStudent">Select Student</label>
+        <select id="selectStudent" required>
+          <option value="">-- Choose Student --</option>
+        </select>
+      </div>
+      <div>
+        <label for="paymentAmount">Amount Paid (₱)</label>
+        <input type="number" id="paymentAmount" min="1" step="any" placeholder="e.g. 20" required>
+      </div>
+      <div>
+        <label for="paymentDate">Date</label>
+        <input type="date" id="paymentDate" required>
+      </div>
+      <div class="btn-container">
+        <button type="submit">Save Record</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="header-flex">
+      <div>
+        <h2>Monthly Contribution Grid</h2>
+        <div class="month-selector">
+          <label for="monthPicker">Select Month:</label>
+          <input type="month" id="monthPicker">
+        </div>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="box box-paid"></span> Paid</span>
+        <span class="legend-item"><span class="box box-unpaid"></span> Not Paid</span>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr id="headerRow">
+          </tr>
+        </thead>
+        <tbody id="rosterBody">
+        </tbody>
+      </table>
+    </div>
+    <div id="emptyRosterMessage" class="empty-state">No students added yet. Add a student above to get started.</div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
