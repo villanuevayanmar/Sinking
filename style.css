@@ -64,6 +64,10 @@ h2 {
   gap: 12px;
 }
 
+.search-select-container {
+  position: relative;
+}
+
 .btn-container {
   grid-column: 1 / -1;
 }
@@ -156,6 +160,17 @@ th {
   white-space: nowrap;
 }
 
+tfoot tr {
+  background-color: #f1f5f9;
+  font-weight: bold;
+}
+
+tfoot td {
+  border-top: 2px solid var(--border);
+  border-bottom: none;
+  padding: 12px 8px;
+}
+
 .sticky-col {
   position: sticky;
   left: 0;
@@ -168,6 +183,11 @@ th {
 
 th.sticky-col {
   background-color: #f8fafc;
+  z-index: 3;
+}
+
+tfoot .sticky-col {
+  background-color: #f1f5f9;
   z-index: 3;
 }
 
