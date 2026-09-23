@@ -22,11 +22,10 @@
   <div class="card">
     <h2>Record Money Received</h2>
     <form id="paymentForm" class="form-grid">
-      <div>
-        <label for="selectStudent">Select Student</label>
-        <select id="selectStudent" required>
-          <option value="">-- Choose Student --</option>
-        </select>
+      <div class="search-select-container">
+        <label for="studentSearchInput">Student Name</label>
+        <input type="text" id="studentSearchInput" placeholder="Type or select student name..." autocomplete="off" required>
+        <datalist id="studentDatalist"></datalist>
       </div>
       <div>
         <label for="paymentAmount">Amount Paid (₱)</label>
@@ -65,12 +64,13 @@
         </thead>
         <tbody id="rosterBody">
         </tbody>
+        <tfoot id="tableFooter">
+        </tfoot>
       </table>
     </div>
     <div id="emptyRosterMessage" class="empty-state">No students added yet. Add a student above to get started.</div>
   </div>
 </div>
-
 <script src="script.js"></script>
 </body>
 </html>
