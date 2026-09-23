@@ -4,12 +4,14 @@ const STORAGE_KEY_PAYMENTS = 'sinking_fund_payments';
 const addStudentForm = document.getElementById('addStudentForm');
 const paymentForm = document.getElementById('paymentForm');
 const newStudentNameInput = document.getElementById('newStudentName');
-const selectStudent = document.getElementById('selectStudent');
+const studentSearchInput = document.getElementById('studentSearchInput');
+const studentDatalist = document.getElementById('studentDatalist');
 const paymentAmountInput = document.getElementById('paymentAmount');
 const paymentDateInput = document.getElementById('paymentDate');
 const monthPicker = document.getElementById('monthPicker');
 const headerRow = document.getElementById('headerRow');
 const rosterBody = document.getElementById('rosterBody');
+const tableFooter = document.getElementById('tableFooter');
 const emptyRosterMessage = document.getElementById('emptyRosterMessage');
 
 const today = new Date();
@@ -58,13 +60,13 @@ function getDaysInMonth(yearMonthStr) {
   return dates;
 }
 
-function updateStudentDropdown() {
-  selectStudent.innerHTML = '<option value="">-- Choose Student --</option>';
+function updateStudentSuggestions() {
+  studentDatalist.innerHTML = '';
+  studentSearchInput.setAttribute('list', 'studentDatalist');
   students.forEach(student => {
     const opt = document.createElement('option');
     opt.value = student;
-    opt.textContent = student;
-    selectStudent.appendChild(opt);
+    studentDatalist.appendChild(opt);
   });
 }
 
@@ -89,6 +91,7 @@ function renderGrid() {
   headerRow.appendChild(actionTh);
 
   rosterBody.innerHTML = '';
+  tableFooter.innerHTML = '';
 
   if (students.length === 0) {
     emptyRosterMessage.style.display = 'block';
@@ -97,6 +100,8 @@ function renderGrid() {
 
   emptyRosterMessage.style.display = 'none';
 
+  let grandTotal = 0;
+
   students.forEach((student) => {
     const studentPayments = payments[student] || {};
 
@@ -104,6 +109,8 @@ function renderGrid() {
     Object.values(studentPayments).forEach(amt => {
       totalPaid += Number(amt);
     });
+
+    grandTotal += totalPaid;
 
     const tr = document.createElement('tr');
 
@@ -134,6 +141,15 @@ function renderGrid() {
 
     rosterBody.appendChild(tr);
   });
+
+  const footerTr = document.createElement('tr');
+  const totalDays = monthDays.length;
+
+  footerTr.innerHTML = `
+    <td class="sticky-col"><strong>Grand Total Received:</strong></td>
+    <td colspan="${totalDays + 2}"><strong>${formatPeso(grandTotal)}</strong></td>
+  `;
+  tableFooter.appendChild(footerTr);
 }
 
 addStudentForm.addEventListener('submit', (e) => {
@@ -144,7 +160,7 @@ addStudentForm.addEventListener('submit', (e) => {
     students.push(name);
     if (!payments[name]) payments[name] = {};
     saveData();
-    updateStudentDropdown();
+    updateStudentSuggestions();
     renderGrid();
     newStudentNameInput.value = '';
   }
@@ -152,11 +168,16 @@ addStudentForm.addEventListener('submit', (e) => {
 
 paymentForm.addEventListener('submit', (e) => {
   e.preventDefault();
-  const student = selectStudent.value;
+  const student = studentSearchInput.value.trim();
   const amount = parseFloat(paymentAmountInput.value);
   const date = paymentDateInput.value;
 
   if (!student || isNaN(amount) || !date) return;
+
+  if (!students.includes(student)) {
+    alert('Student name not found in roster. Please add the student first or select a name from the list.');
+    return;
+  }
 
   if (!payments[student]) payments[student] = {};
 
@@ -170,7 +191,7 @@ paymentForm.addEventListener('submit', (e) => {
   renderGrid();
 
   paymentAmountInput.value = '';
-  selectStudent.value = '';
+  studentSearchInput.value = '';
 });
 
 monthPicker.addEventListener('change', renderGrid);
@@ -179,9 +200,9 @@ function removeStudent(studentName) {
   students = students.filter(s => s !== studentName);
   delete payments[studentName];
   saveData();
-  updateStudentDropdown();
+  updateStudentSuggestions();
   renderGrid();
 }
 
-updateStudentDropdown();
+updateStudentSuggestions();
 renderGrid();
